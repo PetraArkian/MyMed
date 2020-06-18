@@ -1,4 +1,8 @@
-# [Start Bootstrap - New Age](https://startbootstrap.com/template-overviews/new-age/)
+# [Landing page - Built with New Age](https://mymed.surge.sh)
+
+Available at https://mymed.surge.sh or www.mymed.tech this is the default landing page to allow developers to contact the team or for users to sign up for beta when made available. Built using New Age from Start Bootstrap under MIT liscence. Details on the theme and build are available from Start Bootstrap and David Miller below! 
+
+# Theme information
 
 [New Age](http://startbootstrap.com/template-overviews/new-age/) is a web app landing page theme for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/).
 
