@@ -5,6 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinkScreen from '../screens/LinkScreen';
 import FileScreen from '../screens/FileScreen';
+import AddScreen from '../screens/AddScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -23,6 +24,14 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'Home',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-home" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Add"
+        component={AddScreen}
+        options={{
+          title: 'Add File',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-add" />,
         }}
       />
       <BottomTab.Screen
@@ -51,6 +60,8 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'Welcome to MyMed';
+    case 'Add':
+      return 'Add a new File';
     case 'Links':
       return 'Help';
     case 'Files':
