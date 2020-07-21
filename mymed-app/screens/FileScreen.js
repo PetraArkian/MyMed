@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
+import * as React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import BottomTabNavigator from '../navigation/BottomTabNavigator';
 
-export default function FileScreen() {
+export default function FileScreen({navigation}) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <OptionButton
@@ -34,7 +35,7 @@ export default function FileScreen() {
       <OptionButton
         icon="md-add"
         label="Add New"
-        onPress={() => WebBrowser.openBrowserAsync('http://www.sammylincroft.com')}
+        onPress={() => navigation.navigate('Add')}
         isLastOption
       />
     </ScrollView>
