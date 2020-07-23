@@ -39,14 +39,13 @@ export default class App extends React.Component {
       return <Text>Hello, the file you have selected is: {this.state.file.name}</Text>
     }
     else if (this.state.image !== null) {
-      return <Image source={this.state.image.uri} style={{ width: 200, height: 200 }} />}
-
+      return <Image source={{uri: this.state.image.uri}} style={{ width: 200, height: 200 }} />}
   }
   
 
   render() {
-    let { image } = this.state.image;
-    let { file } = this.state.file;
+    let { image } = this.state;
+    let { file } = this.state;
 
     return (
       <View style={styles.container}>
@@ -65,7 +64,7 @@ export default class App extends React.Component {
         {(image || file) && (this.renderElement())} 
         
         {/* /* {image &&
-          <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */} */}
+          <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */} 
       
       </View>
       </View>
