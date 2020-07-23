@@ -7,11 +7,17 @@ import * as FileSystem from 'expo-file-system';
 export default class App extends React.Component {
     state = {
       image: null,
+      file: null
     };
+
   _pickDocument = async () => {
 	    let result = await DocumentPicker.getDocumentAsync({});
 		  alert(result.uri);
       console.log(result);
+
+      if (!result.cancelled) {
+        this.setState({file: result})
+      }
 	}
 
    _pickImage = async () => {
@@ -24,12 +30,24 @@ export default class App extends React.Component {
     console.log(result)
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.setState({ image: result });
     }
   };
 
+  renderElement() {
+    if (this.state.file !== null){
+      return <Text>Hello, the file you have selected is: {this.state.file.name}</Text>
+    }
+    else if (this.state.image !== null) {
+      return <Image source={this.state.image.uri} style={{ width: 200, height: 200 }} />}
+
+  }
+  
+
   render() {
-         let { image } = this.state;
+    let { image } = this.state.image;
+    let { file } = this.state.file;
+
     return (
       <View style={styles.container}>
         <Button
@@ -37,13 +55,18 @@ export default class App extends React.Component {
           onPress={this._pickDocument}
         />
 
+  
+
       <View style={{ 'marginTop': 20}}>
         <Button
           title="Select Image"
           onPress={this._pickImage}
         />
-        {image &&
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        {(image || file) && (this.renderElement())} 
+        
+        {/* /* {image &&
+          <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */} */}
+      
       </View>
       </View>
     );
