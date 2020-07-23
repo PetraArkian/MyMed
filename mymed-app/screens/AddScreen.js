@@ -7,7 +7,7 @@ import * as FileSystem from 'expo-file-system';
 export default class App extends React.Component {
     state = {
       image: null,
-      file: null
+      file: null,
     };
 
   _pickDocument = async () => {
@@ -16,6 +16,7 @@ export default class App extends React.Component {
       console.log(result);
 
       if (!result.cancelled) {
+        this.setState({image: null}) //choose a file or image, not both.
         this.setState({file: result})
       }
 	}
@@ -30,9 +31,40 @@ export default class App extends React.Component {
     console.log(result)
 
     if (!result.cancelled) {
+      this.setState({file: null});
       this.setState({ image: result });
     }
   };
+
+  _uploadFile = async () => {
+    //Upload Selected File to App Storage
+    if (this.state.file) {
+    FileSystem.copyAsync(
+      {from: this.state.file.uri,
+        to: (FileSystem.documentDirectory + this.state.file.name)}
+      )
+      .then(() => {
+        alert('Finished copying to ' + FileSystem.documentDirectory + this.state.file.name);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+    //Upload Selected Image to App Storage
+    if (this.state.image) {
+    var imageName = this.state.image.uri.split('/').pop(); //get the file name from the uri
+    FileSystem.copyAsync(
+      {from: this.state.image.uri,
+        to: (FileSystem.documentDirectory + imageName)}
+      )
+      .then(() => {
+        alert('Finished copying to ' + FileSystem.documentDirectory + imageName);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+  }
 
   renderElement() {
     if (this.state.file !== null){
@@ -41,7 +73,7 @@ export default class App extends React.Component {
     else if (this.state.image !== null) {
       return <Image source={{uri: this.state.image.uri}} style={{ width: 200, height: 200 }} />}
   }
-  
+
 
   render() {
     let { image } = this.state;
@@ -54,19 +86,23 @@ export default class App extends React.Component {
           onPress={this._pickDocument}
         />
 
-  
+
 
       <View style={{ 'marginTop': 20}}>
         <Button
           title="Select Image"
           onPress={this._pickImage}
         />
-        {(image || file) && (this.renderElement())} 
-        
-        {/* /* {image &&
-          <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */} 
-      
+        {(image || file) && (this.renderElement())}
       </View>
+
+      <View style={{ 'marginTop': 20}}>
+        <Button
+          title="Save to Medical Record"
+          onPress={this._uploadFile}
+        />
+      </View>
+
       </View>
     );
   }
