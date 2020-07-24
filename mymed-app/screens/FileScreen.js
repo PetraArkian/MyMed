@@ -4,84 +4,36 @@ import * as React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import BottomTabNavigator from '../navigation/BottomTabNavigator';
+import * as FileSystem from 'expo-file-system';
 
-export default function FileScreen({navigation}) {
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <OptionButton
-        icon="md-folder"
-        label="Test Results"
-        onPress={() => WebBrowser.openBrowserAsync('https://docs.expo.io')}
-      />
 
-      <OptionButton
-        icon="md-folder"
-        label="Prescriptions"
-        onPress={() => WebBrowser.openBrowserAsync('https://reactnavigation.org')}
-      />
+export default class App extends React.Component {
+    state = {
+        files: [],
+    };
 
-      <OptionButton
-        icon="md-folder"
-        label="Refferals"
-        onPress={() => WebBrowser.openBrowserAsync('https://forums.expo.io')}
-      />
+    _readFilesFromFileSystem = async () => {
+        let result = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+        console.log(result);
+        this.setState({files: result}); // setting files to be an array of file names from directory of FileSystem
+    }
 
-      <OptionButton
-        icon="md-folder"
-        label="Bills"
-        onPress={() => WebBrowser.openBrowserAsync('http://www.sammylincroft.com')}
-      />
+    _renderElement(){
+        this._readFilesFromFileSystem();
+        if (this.state.files.length > 0){
+        return <Text>{this.state.files.map(file => file + "\n")}</Text>
+        }
+        else {
+            return <Text>No files uploaded</Text>;
+        }
+    }
 
-      <OptionButton
-        icon="md-add"
-        label="Add New"
-        onPress={() => navigation.navigate('Add')}
-        isLastOption
-      />
-    </ScrollView>
-  );
+    render() {
+       let element = this._renderElement();
+       return (
+       <View>
+        {(this.state.files.length > 0) && element}
+       </View>
+       );
+    }
 }
-
-function OptionButton({ icon, label, onPress, isLastOption }) {
-  return (
-    <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,255,0.45)" />
-        </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
-      </View>
-    </RectButton>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fafafa',
-  },
-  contentContainer: {
-    paddingTop: 15,
-  },
-  optionIconContainer: {
-    marginRight: 12,
-  },
-  option: {
-    backgroundColor: '#fdfdfd',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: '#ededed',
-  },
-  lastOption: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  optionText: {
-    fontSize: 15,
-    alignSelf: 'flex-start',
-    marginTop: 1,
-  },
-});
